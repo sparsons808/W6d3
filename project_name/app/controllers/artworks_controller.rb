@@ -1,14 +1,15 @@
 class ArtworksController < ApplicationController 
     def index
-        render json: Artwork.all
+        @artworks = Artwork.find(params[:user_id])
+        render json: @artworks
     end
 
     def create
-        artwork = Artwork.new(artwork_params)
-        if artwork.save
-            render json: artwork
+        @artwork = Artwork.new(artwork_params)
+        if @artwork.save
+            render json: @artwork
         else
-            render json: artwork.errors.full_messages, status: :unprocessable_entity
+            render json: @artwork.errors.full_messages, status: :unprocessable_entity
         end
     end
 
@@ -24,6 +25,12 @@ class ArtworksController < ApplicationController
         else
             render json: @artwork.errors.full_messages, status: 422
         end
+    end
+
+    def destroy
+        @artwork = User.find(params[:id])
+        @artwork.destroy
+        redirect_to artworks_url
     end
 
     private
